@@ -1,5 +1,5 @@
+import type { Competition } from "./competition";
 import type { Country } from "./country";
-import type { League } from "./league";
 import type { Player } from "./player";
 
 export type Club = {
@@ -8,6 +8,20 @@ export type Club = {
   logoUrl: string;
   country: Country;
   establishedAt: Date;
-  players: Player[];
-  leagues: League[];
+  players?: Player[];
+  competitions?: Competition[];
+};
+
+export type ClubCreateDto = {
+  name: string;
+  logoUrl: string;
+  countryId: number;
+  establishedAt?: Date;
+  competitionsIds?: number[];
+};
+
+export type ClubUpdateDto = {
+  name?: string;
+  logoUrl?: string;
+  countryId?: number;
 };

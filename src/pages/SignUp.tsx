@@ -1,43 +1,51 @@
 import { AxiosError } from "axios";
-import { Link } from "react-router-dom";
-import { createUser } from "../api/userApi";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { signUpUser } from "../api/userApi";
 import Auth2Provider from "../components/Auth2Provider";
-import type { UserCreateDto } from "../types/user";
+import Logo from "../components/Logo";
+import ShowPassword from "../components/ShowPassword";
+import useAuth from "../hooks/useAuth";
+import type { UserSignUpDto } from "../types/user";
 
 type SignUpProps = {};
 
 const SignUp = ({}: SignUpProps) => {
+  const { signIn } = useAuth();
+
+  const navigate = useNavigate();
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const user: UserCreateDto = {
-      email: (e.target as HTMLFormElement).email.value,
-      password: (e.target as HTMLFormElement).password.value,
-      userTeamName: (e.target as HTMLFormElement).userTeamName.value,
+    const form = e.target as HTMLFormElement;
+    const formData = new FormData(form);
+
+    const user: UserSignUpDto = {
+      email: formData.get("email") as string,
+      password: formData.get("password") as string,
+      userTeamName: formData.get("userTeamName") as string,
     };
 
     try {
-      const res = await createUser(user);
-      console.log(res.data);
-    } catch (error: unknown) {
-      if (error instanceof AxiosError) {
-        console.error(error.response?.data);
+      const data = await signUpUser(user);
+      signIn(data);
+      navigate("/team");
+    } catch (err: unknown) {
+      if (err instanceof AxiosError) {
+        console.error(err.response?.data);
+        toast.error(err.response?.data);
       }
     }
   };
 
-  const handleGitHubSignUp = () => {
-    console.log("GitHub sign up initiated");
-  };
-
-  const handleGoogleSignUp = () => {
-    console.log("Google sign up initiated");
-  };
-
   return (
     <section className="flex flex-col items-center justify-center pb-10">
-      {/* <Logo width={150} height={150} /> */}
+      <Link to={"/"} className="absolute top-0">
+        <Logo width={150} height={150} />
+      </Link>
       <h1 className="font-bold text-4xl mb-2">
+        Welcome,{" "}
         <span className="underline underline-offset-4  decoration-[5px] decoration-(--color-primary)">
           Sign Up
         </span>{" "}
@@ -47,67 +55,64 @@ const SignUp = ({}: SignUpProps) => {
         Build and Manage your ultimate team
       </p>
 
-      <div className="flex gap-2.5 mt-4">
+      <div className="flex gap-2.5 mt-2">
         <Link
           to={"/auth/sign-in"}
-          className="border border-(--color-text) font-bold py-2 px-13 rounded hover:brightness-[85%]"
+          className="border border-(--color-primary) font-bold py-2 px-13 rounded hover:bg-(--color-primary)"
         >
           Sign In
         </Link>
         <Link
           to={"/auth/sign-up"}
-          className="bg-(--color-primary) border border-(--color-primary) font-bold py-2 px-13 rounded hover:brightness-[115%]"
+          className="bg-(--color-primary) border border-(--color-primary) font-bold py-2 px-13 rounded hover:brightness-115"
         >
           Sign Up
         </Link>
       </div>
 
       <form onSubmit={(e) => handleSubmit(e)} className="w-1/3">
-        {/* Email */}
-        <div className="floating-label-effect mt-5">
+        <div className="floating-label-effect mt-4 mb-2">
           <input
             type="email"
             name="email"
             id="email"
             placeholder=""
-            className="border-2 border-gray-400 rounded py-2 pl-10 w-full hover:border-(--color-text) focus:border-(--color-primary)"
+            required
+            autoFocus
+            autoComplete="email"
+            className="pl-9"
           />
 
-          <label htmlFor="email">Email</label>
+          <label htmlFor="email" className="left-10">
+            Email <span className="text-red-500">*</span>
+          </label>
           <i className="fa-solid fa-envelope absolute left-2 top-1/2 -translate-y-1/2"></i>
         </div>
 
-        {/* Password */}
-        <div className="floating-label-effect mt-4 mb-0.5">
-          <input
-            type="password"
-            name="password"
-            id="password"
-            placeholder=""
-            className="border-2 border-gray-400 rounded py-2 pl-10 w-full hover:border-(--color-text) focus:border-(--color-primary)"
-          />
-
-          <label htmlFor="password">Password</label>
-          <i className="fa-solid fa-lock absolute left-2 top-1/2 -translate-y-1/2"></i>
+        <div className="floating-label-effect mb-2">
+          <ShowPassword autoComplete="new-password" />
         </div>
 
-        {/* UserTeam's name */}
-        <div className="floating-label-effect mt-4 mb-0.5">
+        <div className="floating-label-effect">
           <input
             type="text"
             name="userTeamName"
             id="userTeamName"
             placeholder=""
-            className="border-2 border-gray-400 rounded py-2 pl-10 w-full hover:border-(--color-text) focus:border-(--color-primary)"
+            required
+            autoComplete="userTeamName"
+            className="pl-9"
           />
 
-          <label htmlFor="userTeamName">Team's name</label>
+          <label htmlFor="userTeamName" className="left-10">
+            Team's name <span className="text-red-500">*</span>
+          </label>
           <i className="fa-solid fa-lock absolute left-2 top-1/2 -translate-y-1/2"></i>
         </div>
 
         <button
           type="submit"
-          className="w-full mt-3 text-lg bg-(--color-primary) border-2 border-(--color-primary) font-bold py-2  rounded hover:bg-(--color-text) hover:text-(--color-primary)"
+          className="w-full mt-3 text-lg bg-(--color-primary) border-2 border-(--color-primary) font-bold py-2 rounded hover:bg-(--color-text) hover:text-(--color-primary)"
         >
           <i className="fa-solid fa-user-plus mr-2 align-middle"></i>
           Sign Up

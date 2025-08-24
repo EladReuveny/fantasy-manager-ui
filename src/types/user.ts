@@ -6,19 +6,25 @@ export type User = {
   password: string;
   role: Role;
   createdAt: Date;
-  userTeam: UserTeam | null;
+  userTeam: UserTeam;
 };
 
-export type UserCreateDto = {
+export type UserSignUpDto = {
   email: string;
   password: string;
   userTeamName: string;
+};
+
+export type UserSignInDto = {
+  email: string;
+  password: string;
 };
 
 export type UserUpdateDto = {
   email?: string;
   password?: string;
   role?: Role;
+  userTeamName?: string;
 };
 
-type Role = "ADMIN" | "USER";
+export type Role = "USER" | "ADMIN";

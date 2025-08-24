@@ -2,8 +2,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
 
 :root {
-  --color-bg: hsl(220, 10%, 14%);
-  --color-bg-darker: hsl(220, 10%, 5%);
+  --color-bg: hsl(220, 10%, 5%);
   --color-text: hsl(0, 0%, 100%);
   --color-primary: hsl(207, 100%, 50%);
   --color-accent: hsl(35, 100%, 50%);
@@ -41,7 +40,6 @@ body {
 }
 img {
   max-width: 100%;
-  height: auto;
 }
 input,
 textarea,
@@ -51,28 +49,53 @@ button {
   font-family: inherit;
   outline: none;
   caret-color: var(--color-primary);
+  white-space: nowrap;
 }
 *:hover {
   transition: 0.3s;
+}
+summary::webkit-details-marker {
+  display: none;
+}
+summary::marker {
+  content: "";
 }
 
 .floating-label-effect {
   position: relative;
 }
-.floating-label-effect input + label{
+.floating-label-effect input,
+.floating-label-effect select {
+  border: 2px solid var(--color-gray-400);
+  border-radius: 0.25rem;
+  padding-block: 0.5rem;
+  width: 100%;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+.floating-label-effect input:hover,
+.floating-label-effect select:hover {
+  border-color: var(--color-text);
+}
+.floating-label-effect input:focus,
+.floating-label-effect select:focus {
+  border-color: var(--color-primary);
+}
+.floating-label-effect input + label,
+.floating-label-effect select + label {
   position: absolute;
-  left: 2.5rem;
   top: 50%;
   transform: translateY(-50%);
-  transition: .3s;
+  transition: 0.3s;
 }
 .floating-label-effect input:focus + label,
-.floating-label-effect input:not(:placeholder-shown) + label {
+.floating-label-effect input:not(:placeholder-shown) + label,
+.floating-label-effect select:focus + label,
+.floating-label-effect select:not([value=""]) + label {
   top: 0.1rem;
   left: 0.5rem;
   font-size: 0.75rem;
   color: var(--color-primary);
   background-color: var(--color-bg);
   padding-inline: 0.35rem;
-  
 }

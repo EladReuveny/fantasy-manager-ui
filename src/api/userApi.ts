@@ -1,23 +1,37 @@
 import axios from "axios";
 import { apiVersion, baseUrl } from "../config";
-import type { UserCreateDto, UserUpdateDto } from "../types/user";
+import type {
+  UserSignInDto,
+  UserSignUpDto,
+  UserUpdateDto,
+} from "../types/user";
 
 export const getAllUsers = async () => {
-  return await axios.get(`${baseUrl}/${apiVersion}/users`);
+  const res = await axios.get(`${baseUrl}/${apiVersion}/users`);
+  return res.data;
 };
 
 export const getUserById = async (userId: number) => {
-  return await axios.get(`${baseUrl}/${apiVersion}/users/${userId}`);
+  const res = await axios.get(`${baseUrl}/${apiVersion}/users/${userId}`);
+  return res.data;
 };
 
-export const createUser = async (user: UserCreateDto) => {
-  return await axios.post(`${baseUrl}/${apiVersion}/users`, user);
-};
-
-export const deleteUser = async (userId: number) => {
-  return await axios.delete(`${baseUrl}/${apiVersion}/users/${userId}`);
+export const signUpUser = async (user: UserSignUpDto) => {
+  const res = await axios.post(`${baseUrl}/${apiVersion}/users/sign-up`, user);
+  return res.data;
 };
 
 export const updateUser = async (userId: number, user: UserUpdateDto) => {
-  return await axios.put(`${baseUrl}/${apiVersion}/users/${userId}`, user);
+  const res = await axios.put(`${baseUrl}/${apiVersion}/users/${userId}`, user);
+  return res.data;
+};
+
+export const deleteUser = async (userId: number) => {
+  const res = await axios.delete(`${baseUrl}/${apiVersion}/users/${userId}`);
+  return res.data;
+};
+
+export const signInUser = async (user: UserSignInDto) => {
+  const res = await axios.post(`${baseUrl}/${apiVersion}/users/sign-in`, user);
+  return res.data;
 };

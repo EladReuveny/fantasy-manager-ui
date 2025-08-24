@@ -11,11 +11,20 @@ export type UserTeam = {
   rank: number;
   formation: Formation;
   owner: User;
-  players: Player[];
-  captain: Player | null;
+  players?: Player[];
+  captain?: Player;
 };
 
-type Formation =
+export type UserTeamUpdateDto = {
+  name?: string;
+  budget?: number;
+  points?: number;
+  rank?: number;
+  formation?: Formation;
+  captainId?: number;
+};
+
+export type Formation =
   | "4-4-2"
   | "4-3-3"
   | "4-2-3-1"
